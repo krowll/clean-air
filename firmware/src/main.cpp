@@ -20,6 +20,7 @@
 #include "rotary.h"
 #include "operationHourCounter.h"
 #include "updateService.h"
+#include "caseTempController.h"
 
 void setFanSpeed(int speed);
 
@@ -39,6 +40,9 @@ OperationHourCounter operationHourCounter;
 
 // Define the fans controller.
 FanController fanController;
+
+// Define case temperature controller.
+CaseTempController caseTempController;
 
 // Define the adpter to handle hardware related io things.
 Rotary rotary;
@@ -198,6 +202,13 @@ void setup()
 
   configureNetwork();
 
+<<<<<<< HEAD
+=======
+  initStats();
+
+  caseTempController.initCaseTempController();
+
+>>>>>>> add case temperature controller
   ESP_LOGI(TAG, "Setup complete %s", TAG);
   ESP_LOGD(TAG, "offlineMode: %d", offlineMode);
   ESP_LOGD(TAG, "otaUrlConfigured: %d", otaUrlConfigured);
@@ -222,4 +233,7 @@ void loop()
 
   // handlet the current rotary position
   rotary.handle();
+
+  // regulate case temperature
+  caseTempController.caseTempController();
 } // loop
