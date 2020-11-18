@@ -201,14 +201,9 @@ void setup()
   updateService.setup(jsonHandler);
 
   configureNetwork();
+  
+  caseTempController.init();
 
-<<<<<<< HEAD
-=======
-  initStats();
-
-  caseTempController.initCaseTempController();
-
->>>>>>> add case temperature controller
   ESP_LOGI(TAG, "Setup complete %s", TAG);
   ESP_LOGD(TAG, "offlineMode: %d", offlineMode);
   ESP_LOGD(TAG, "otaUrlConfigured: %d", otaUrlConfigured);

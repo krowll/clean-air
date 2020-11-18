@@ -5,17 +5,17 @@
 #include "caseTempController.h"
 #include "caseTempController/controller.h"
 #include "caseTempController/fan.h"
-#include "caseTempController/temperature.h"
 
 //*****************************************//
-// main					   				   //
+// functions    		   				   //
 //*****************************************//
-int CaseTempController::initCaseTempController(void)
+int CaseTempController::init(void)
 {
     // variables
 	int i;								// loop counter
     #ifndef SIMULATION
         int temperature;				// current actual temperature
+        int temperature_error;			// the current difference between wished temperature and actual temperature
     #endif
 
     printf("Configuration:\n");
@@ -32,13 +32,14 @@ int CaseTempController::initCaseTempController(void)
     printf("Initialize hardware.\n");
     if (fan_init() != 0)
 		return -1;
+    tempSensor.init();
 
     printf("Fill the temperature_errors array with inital values.\n");
 	for (i = 0; i < TAU; i++)
 	{
         #ifndef SIMULATION
-            if ((temperature = read_temperature()) == TEMP_READ_ERROR)
-			    goto end;
+            if ((temperature = tempSensor.read()) == TEMP_READ_ERROR)
+			    return -1;
 		
 		    temperature_errors[i] =  ((temperature_error = temperature - GOAL_TEMP) > 0 ? temperature_error : 0);
         #else
@@ -56,8 +57,8 @@ int CaseTempController::caseTempController(void)
 	// variables
 	int i;								// loop counter
 	int temperature;					// current actual temperature
-	int temperature_error;				// the current difference between wished temperature and actual temperature
-	int temperature_error_sum;			// the sum of the last TAU temperature errors
+	int temperature_error;			// the current difference between wished temperature and actual temperature
+    int temperature_error_sum;			// the sum of the last TAU temperature errors
 	int pr, in, di;						// proportional, integral, and differential adjustment
 	int fan_speed;						// the fan speed that shall be set
 
@@ -66,7 +67,7 @@ int CaseTempController::caseTempController(void)
 	while (true)
 	{
 		// read in newest temperature error, put it in place of the oldest value
-		if ((temperature = read_temperature()) == TEMP_READ_ERROR)
+		if ((temperature = tempSensor.read()) == TEMP_READ_ERROR)
 			return -1;
 		*p_oldest_temperature_error = temperature_error = (temperature_error = temperature - GOAL_TEMP) > 0 ? temperature_error : 0;
         printf("\nNewest temperature: %i°C\n", temperature);

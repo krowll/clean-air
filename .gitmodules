@@ -1,3 +1,6 @@
 [submodule "firmware/lib/Arduino-Temperature-Control-Library"]
 	path = firmware/lib/Arduino-Temperature-Control-Library
 	url = https://github.com/milesburton/Arduino-Temperature-Control-Library
+[submodule "firmware/lib/OneWire"]
+	path = firmware/lib/OneWire
+	url = https://github.com/PaulStoffregen/OneWire

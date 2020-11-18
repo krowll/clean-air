@@ -2,6 +2,7 @@
 // includes                                //
 //*****************************************//
 #include "caseTempController/config.h"
+#include "caseTempController/temperature.h"
 
 class CaseTempController
 {
@@ -13,9 +14,12 @@ class CaseTempController
         // marks the place of the oldest info in the temperature_errors array
         int* p_oldest_temperature_error;
 
+        // temperature sensor
+        TempSensor tempSensor;
+
     public:
 
-        int initCaseTempController(void);
+        int init(void);
         
         int caseTempController(void);
 };
